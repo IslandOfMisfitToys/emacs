@@ -1,3 +1,4 @@
+![alt text](https://github.com/IslandOfMisfitToys/emacs/blob/master/images/emacs-tag_cover_photo.png "Emacs: The One True Editor")
 
 
 ## Emacs Development

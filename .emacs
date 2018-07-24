@@ -18,7 +18,11 @@
 ;; Enable the dark theme...
 (load-theme 'atom-one-dark t)       ; Color theme installed via melpa
 
+; Remove the unused tool bar which takes up space
+(tool-bar-mode -1)
 
+
+;; Ya, I'm an ido-mode kinda guy...
 ;; https://www.masteringemacs.org/article/introduction-to-ido-mode
 ;; C-d Opens a dired buffer in the current directory. Available in Dirs / Files
 (setq ido-enable-flex-matching t)
@@ -39,6 +43,12 @@
 
 (global-set-key (kbd "C-x f") 'revert-buffer-noask)
 
+
+;; ------------------------------------------------------------
+;; Favorite key bindings.
+(global-set-key (kbd "C-x l") 'goto-line)
+(global-set-key (kbd "C-x r") 'rename-buffer)
+
 ;; ------------------------------------------------------------
 ;; magit
 ;; https://magit.vc/
@@ -47,6 +57,7 @@
   (package-refresh-contents) (package-install 'magit))
 
 (global-set-key (kbd "C-x g") 'magit-status)
+(global-set-key (kbd "C-x p") 'magit-push)
 
 
 ;; magit

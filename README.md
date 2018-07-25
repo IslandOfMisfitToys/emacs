@@ -23,7 +23,29 @@ The help available with terraform is ,to its credit, excellent.
 
 ```
 
+# Flymd
+ Essentially flycheck for markdown with browser display.
+ The snippet of elisp below should do the trick and initialize flymd
+ to use Mozilla which works. 
 
+```elisp
+;; ------------------------------------------------------------
+;; flymd: flycheck like markdown mode with html browser viewing.
+;; https://github.com/mola-T/flymd
+;; 
+;; One and only one interactive function in this package.
+;; M-x flymd-flyit, current markdown buffer opened in a browser.
+;; If you close the page accidentally, M-x flymd-flyit to reopen the page.
+
+(unless (package-installed-p 'flymd)
+  (package-refresh-contents) (package-install 'flymd))
+
+;; Chrome doesn't work, use firefox. 
+(defun my-flymd-browser-function (url)
+   (let ((browse-url-browser-function 'browse-url-firefox))
+     (browse-url url)))
+ (setq flymd-browser-open-function 'my-flymd-browser-function)
+```
 
 # Python
 

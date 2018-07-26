@@ -1,9 +1,11 @@
 ![alt text](https://github.com/IslandOfMisfitToys/emacs/blob/master/images/emacs-tag_cover_photo.png "Emacs: The One True Editor")
 
 
-# Emacs Development
+# Emacs Development for Version 26.1
 
-My emacs initialization and code repository for DevOps work. Herein is my .emacs file I use for DevOps works. It is designed such that it can self-install and initialize itself which makes it useful for emacsen starting from scratch with DevOps work.
+My emacs initialization and code repository for DevOps work. Herein is my .emacs file I use for DevOps works. It is designed such that it can self-install and initialize itself which makes it useful for emacsen starting from scratch with DevOps work. 
+
+*NOTE:* Extraneous installation steps such as installing git locally or various git modules per example are beyond the scope of this document. It merely addresses the elisp portion as an example.
 
 # Company Quick help
 
@@ -51,10 +53,12 @@ The help available with terraform is ,to its credit, excellent.
 
 My preferred scripting language.
 So I install flycheck to check the syntax on the fly.
+
 autopep8 to maintain the formatting: https://github.com/hhatto/autopep8
+
 importmagic mode to manage imports:  https://github.com/anachronic/importmagic.el
 
-Note that autopep8 and importmagic require pip installs. Essentially the elisp
+*Note* that autopep8 and importmagic require pip installs. Essentially the elisp
 interfaces with these python programs.
 
 ```elisp

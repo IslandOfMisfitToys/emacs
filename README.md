@@ -53,10 +53,12 @@ The help available with terraform is ,to its credit, excellent.
 
 My preferred scripting language.
 So I install flycheck to check the syntax on the fly.
+
 autopep8 to maintain the formatting: https://github.com/hhatto/autopep8
+
 importmagic mode to manage imports:  https://github.com/anachronic/importmagic.el
 
-Note that autopep8 and importmagic require pip installs. Essentially the elisp
+*Note* that autopep8 and importmagic require pip installs. Essentially the elisp
 interfaces with these python programs.
 
 ```elisp

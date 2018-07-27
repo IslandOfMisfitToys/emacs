@@ -64,6 +64,23 @@
 ;; ------------------------------------------------------------
 
 ;; ------------------------------------------------------------
+;; flymd: flycheck like markdown mode with html browser viewing.
+;; https://github.com/mola-T/flymd
+;; 
+;; One and only one interactive function in this package.
+;; M-x flymd-flyit, current markdown buffer opened in a browser.
+;; If you close the page accidentally, M-x flymd-flyit to reopen the page.
+
+(unless (package-installed-p 'flymd)
+  (package-refresh-contents) (package-install 'flymd))
+
+;; Chrome doesn't work, use firefox. 
+(defun my-flymd-browser-function (url)
+   (let ((browse-url-browser-function 'browse-url-firefox))
+     (browse-url url)))
+ (setq flymd-browser-open-function 'my-flymd-browser-function)
+
+;; ------------------------------------------------------------
 ;; Company quickhelp mode!
 ;; https://github.com/expez/company-quickhelp
 ;;
@@ -121,12 +138,15 @@
 ;; Python stuff
 
 
+
+
 ;; The first part is the basic go mode operations.
 ;; http://arenzana.org/2015/Emacs-for-Go/
 ;; http://rz.scale-it.pl/2013/03/04/emacs_on_fly_syntax_checking_for_go_programming_language.html
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;                                Go Stuff                            ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 ;; Load package-install sources
 (when (>= emacs-major-version 24)
@@ -142,7 +162,11 @@
     go-mode
     go-eldoc
     go-autocomplete
-
+    go-rename
+    go-gopath
+    go-imports
+    go-errcheck
+    
         ;;;;;; Markdown
     markdown-mode
 
@@ -195,7 +219,7 @@
 
 ;;Custom Compile Command
 (defun go-mode-setup ()
-  (setq compile-command "go build -v && go test -v && go vet && golint && ./bin/errcheck")
+  (setq compile-command "go build -v && go test -v && go vet && golint && errcheck")
   (define-key (current-local-map) "\C-c\C-c" 'compile)
   (go-eldoc-setup)
   (setq gofmt-command "goimports")
@@ -241,7 +265,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (company-quickhelp company-terraform terraform-mode ido-mode yard-mode yaml-mode window-number web-mode utop use-package unicode-fonts tuareg tidy smooth-scroll scala-mode2 rvm ruby-tools ruby-refactor ruby-hash-syntax ruby-additional rubocop rspec-mode rope-read-mode robe rinari racer py-autopep8 projectile project-mode project-explorer popwin pip-requirements pg peep-dired mo-git-blame merlin markdown-toc markdown-mode+ magit-tramp magit-gh-pulls magit-find-file magit-filenotify magit-annex json-rpc json-mode importmagic imenus imenu-anywhere imenu+ idomenu gradle-mode golint go-rename go-eldoc go-autocomplete flymake-ruby flymake-python-pyflakes flymake-go flymake-d flymake flycheck-rust flycheck-gometalinter feature-mode enh-ruby-mode emacs-eclim elpy ein editorconfig-core editorconfig direx dired-narrow dired-imenu d-mode company-racer company-jedi cm-mode cider cedit buffer-move beacon atom-one-dark-theme alchemist ac-ispell ac-dcd ac-anaconda))))
+    (go-complete go-direx go-mode go-errcheck go-gopath go-imports flymd company-quickhelp company-terraform terraform-mode ido-mode yard-mode yaml-mode window-number web-mode utop use-package unicode-fonts tuareg tidy smooth-scroll scala-mode2 rvm ruby-tools ruby-refactor ruby-hash-syntax ruby-additional rubocop rspec-mode rope-read-mode robe rinari racer py-autopep8 projectile project-mode project-explorer popwin pip-requirements pg peep-dired mo-git-blame merlin markdown-toc markdown-mode+ magit-tramp magit-gh-pulls magit-find-file magit-filenotify magit-annex json-rpc json-mode importmagic imenus imenu-anywhere imenu+ idomenu gradle-mode golint go-rename go-eldoc go-autocomplete flymake-ruby flymake-python-pyflakes flymake-go flymake-d flymake flycheck-rust flycheck-gometalinter feature-mode enh-ruby-mode emacs-eclim elpy ein editorconfig-core editorconfig direx dired-narrow dired-imenu d-mode company-racer company-jedi cm-mode cider cedit buffer-move beacon atom-one-dark-theme alchemist ac-ispell ac-dcd ac-anaconda))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

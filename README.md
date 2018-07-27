@@ -7,6 +7,8 @@ My emacs initialization and code repository for DevOps work. Herein is my .emacs
 
 *NOTE:* Extraneous installation steps such as installing git locally or various git modules per example are beyond the scope of this document. It merely addresses the elisp portion as an example.
 
+*NOTE:* The work on this page assumes linux. Windows and MacOS are a different story entirely. 
+
 # Company Quick help
 
 When used with completions provides default help if available.
@@ -81,9 +83,52 @@ interfaces with these python programs.
 ```
 
 # Go Lang
-
+*My preferred systems programming language.*
+ 
 This is still a work in progress. I will have more complete instructions 
-later. It mostly works
+later. It mostly works with the exception of gorename which has always been
+an iffy proposition. 
+
+### Installation 
+
+The first step is to install the following two scripts into your go working area
+and then execute them. The first scripts is env.sh:
+
+```shell
+#!/bin/sh
+export GOPATH=`pwd`
+export PATH=:$GOPATH/bin:$PATH
+```
+
+Execute the above env.sh like so:
+
+```shell
+$ source ./env.sh
+```
+
+At this point you have the proper environment variables set to your current go work area.
+Now create the following install.sh script:
+
+```shell
+#!/bin/sh
+set -x
+go get -u golang.org/x/tools/cmd/...
+go get -u github.com/rogpeppe/godef
+go get -u github.com/ptrv/goflycheck
+go get -u github.com/dougm/goflymake
+go get -u github.com/golang/lint/golint
+go get -u github.com/nsf/gocode
+go get -u github.com/kisielk/errcheck
+echo 'Done'
+```
+
+When executed this script will install all the necessary tools for the elisp below.
+Once that is done you should have your tools installed beneath ./bin in your go working area. You 
+will need to do this for every go project you work on. The tools can and should be isolated.
+
+Once complete you can add the following golang elisp to your .emacs file:
+
+
 
 ```golang
 ;; The first part is the basic go mode operations.
@@ -92,6 +137,7 @@ later. It mostly works
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;                                Go Stuff                            ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 ;; Load package-install sources
 (when (>= emacs-major-version 24)
@@ -107,7 +153,11 @@ later. It mostly works
     go-mode
     go-eldoc
     go-autocomplete
-
+    go-rename
+    go-gopath
+    go-imports
+    go-errcheck
+    
         ;;;;;; Markdown
     markdown-mode
 
@@ -160,7 +210,7 @@ later. It mostly works
 
 ;;Custom Compile Command
 (defun go-mode-setup ()
-  (setq compile-command "go build -v && go test -v && go vet && golint && ./bin/errcheck")
+  (setq compile-command "go build -v && go test -v && go vet && golint && errcheck")
   (define-key (current-local-map) "\C-c\C-c" 'compile)
   (go-eldoc-setup)
   (setq gofmt-command "goimports")
@@ -197,9 +247,10 @@ later. It mostly works
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;                                Go Stuff                            ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ```
 
-My preferred systems programming language.
+
 
 # Terraform
 

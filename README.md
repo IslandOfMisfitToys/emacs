@@ -119,6 +119,7 @@ go get -u github.com/dougm/goflymake
 go get -u github.com/golang/lint/golint
 go get -u github.com/nsf/gocode
 go get -u github.com/kisielk/errcheck
+go get -u github.com/jstemmer/gotags
 echo 'Done'
 ```
 
@@ -127,6 +128,7 @@ Once that is done you should have your tools installed beneath ./bin in your go 
 will need to do this for every go project you work on. The tools can and should be isolated.
 
 Once complete you can add the following golang elisp to your .emacs file:
+
 
 
 
@@ -139,6 +141,16 @@ Once complete you can add the following golang elisp to your .emacs file:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
+;; Pop windows is useful for a split window view of the structure of a go program.
+(unless (package-installed-p 'popwin)
+  (package-refresh-contents) (package-install 'popwin))
+
+(require 'popwin)
+(setq display-buffer-function 'popwin:display-buffer)
+
+(push '("^\*go-direx:" :regexp t :position left :width 0.4 :dedicated t :stick t)
+      popwin:special-display-config)
+
 ;; Load package-install sources
 (when (>= emacs-major-version 24)
   (require 'package)
@@ -149,7 +161,7 @@ Once complete you can add the following golang elisp to your .emacs file:
   (package-initialize))
 
 (defvar my-packages
-  '(;;;; Go shit
+  '(;;;; Go stuff
     go-mode
     go-eldoc
     go-autocomplete
@@ -157,7 +169,8 @@ Once complete you can add the following golang elisp to your .emacs file:
     go-gopath
     go-imports
     go-errcheck
-    
+    go-guru
+    go-direx
         ;;;;;; Markdown
     markdown-mode
 
@@ -186,6 +199,8 @@ Once complete you can add the following golang elisp to your .emacs file:
   (go-eldoc-setup))
 
 (add-hook 'go-mode-hook 'go-mode-setup)
+
+
 
 ;;Format before saving
 (defun go-mode-setup ()
@@ -237,17 +252,23 @@ Once complete you can add the following golang elisp to your .emacs file:
   (local-set-key (kbd "C-x .") 'godef-jump)
   (local-set-key (kbd "M-*") 'pop-tag-mark)
   (local-set-key (kbd "C-x s") 'go-rename)
+  (local-set-key (kbd "C-x j") 'go-direx-pop-to-buffer)
   )
 (add-hook 'go-mode-hook 'my-go-mode-hook)
+
+;;  
+
 
 (eval-after-load "go-mode"
   '(require 'flymake-go))
 
 
+;; Make the go guru available in all go buffers
+(add-hook 'go-mode-hook #'go-guru-hl-identifier-mode)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;                                Go Stuff                            ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 ```
 
 

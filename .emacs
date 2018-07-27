@@ -148,6 +148,16 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
+;; Pop windows is useful for a split window view of the structure of a go program.
+(unless (package-installed-p 'popwin)
+  (package-refresh-contents) (package-install 'popwin))
+
+(require 'popwin)
+(setq display-buffer-function 'popwin:display-buffer)
+
+(push '("^\*go-direx:" :regexp t :position left :width 0.4 :dedicated t :stick t)
+      popwin:special-display-config)
+
 ;; Load package-install sources
 (when (>= emacs-major-version 24)
   (require 'package)
@@ -158,7 +168,7 @@
   (package-initialize))
 
 (defvar my-packages
-  '(;;;; Go shit
+  '(;;;; Go stuff
     go-mode
     go-eldoc
     go-autocomplete
@@ -166,7 +176,8 @@
     go-gopath
     go-imports
     go-errcheck
-    
+    go-guru
+    go-direx
         ;;;;;; Markdown
     markdown-mode
 
@@ -195,6 +206,8 @@
   (go-eldoc-setup))
 
 (add-hook 'go-mode-hook 'go-mode-setup)
+
+
 
 ;;Format before saving
 (defun go-mode-setup ()
@@ -246,12 +259,19 @@
   (local-set-key (kbd "C-x .") 'godef-jump)
   (local-set-key (kbd "M-*") 'pop-tag-mark)
   (local-set-key (kbd "C-x s") 'go-rename)
+  (local-set-key (kbd "C-x j") 'go-direx-pop-to-buffer)
   )
 (add-hook 'go-mode-hook 'my-go-mode-hook)
+
+;;  
+
 
 (eval-after-load "go-mode"
   '(require 'flymake-go))
 
+
+;; Make the go guru available in all go buffers
+(add-hook 'go-mode-hook #'go-guru-hl-identifier-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;                                Go Stuff                            ;;;
@@ -265,7 +285,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (go-complete go-direx go-mode go-errcheck go-gopath go-imports flymd company-quickhelp company-terraform terraform-mode ido-mode yard-mode yaml-mode window-number web-mode utop use-package unicode-fonts tuareg tidy smooth-scroll scala-mode2 rvm ruby-tools ruby-refactor ruby-hash-syntax ruby-additional rubocop rspec-mode rope-read-mode robe rinari racer py-autopep8 projectile project-mode project-explorer popwin pip-requirements pg peep-dired mo-git-blame merlin markdown-toc markdown-mode+ magit-tramp magit-gh-pulls magit-find-file magit-filenotify magit-annex json-rpc json-mode importmagic imenus imenu-anywhere imenu+ idomenu gradle-mode golint go-rename go-eldoc go-autocomplete flymake-ruby flymake-python-pyflakes flymake-go flymake-d flymake flycheck-rust flycheck-gometalinter feature-mode enh-ruby-mode emacs-eclim elpy ein editorconfig-core editorconfig direx dired-narrow dired-imenu d-mode company-racer company-jedi cm-mode cider cedit buffer-move beacon atom-one-dark-theme alchemist ac-ispell ac-dcd ac-anaconda))))
+    (go-guru go-complete go-direx go-mode go-errcheck go-gopath go-imports flymd company-quickhelp company-terraform terraform-mode ido-mode yard-mode yaml-mode window-number web-mode utop use-package unicode-fonts tuareg tidy smooth-scroll scala-mode2 rvm ruby-tools ruby-refactor ruby-hash-syntax ruby-additional rubocop rspec-mode rope-read-mode robe rinari racer py-autopep8 projectile project-mode project-explorer popwin pip-requirements pg peep-dired mo-git-blame merlin markdown-toc markdown-mode+ magit-tramp magit-gh-pulls magit-find-file magit-filenotify magit-annex json-rpc json-mode importmagic imenus imenu-anywhere imenu+ idomenu gradle-mode golint go-rename go-eldoc go-autocomplete flymake-ruby flymake-python-pyflakes flymake-go flymake-d flymake flycheck-rust flycheck-gometalinter feature-mode enh-ruby-mode emacs-eclim elpy ein editorconfig-core editorconfig direx dired-narrow dired-imenu d-mode company-racer company-jedi cm-mode cider cedit buffer-move beacon atom-one-dark-theme alchemist ac-ispell ac-dcd ac-anaconda))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
